@@ -27,7 +27,7 @@ function SinglePost() {
                     </span>
                     <span className={cx('date')}>1 hour ago</span>
                 </div>
-                <p>
+                <p className={cx('description')}>
                     Nostrud officia pariatur laborum consectetur non incididunt laborum id. Aliqua ipsum eiusmod
                     consectetur enim ut est. Exercitation quis reprehenderit quis aliquip. Nisi nulla sint voluptate do
                     laborum tempor aute labore eiusmod aliquip. Nostrud officia pariatur laborum consectetur non
