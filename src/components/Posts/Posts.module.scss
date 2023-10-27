@@ -1,6 +1,7 @@
 .wrapper {
-    flex: 9;
     display: flex;
+    flex: 9;
     flex-wrap: wrap;
     margin: 20px;
+    justify-content: space-around;
 }
