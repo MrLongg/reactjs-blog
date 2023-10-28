@@ -28,14 +28,14 @@
 .icon {
     margin-left: 10px;
     cursor: pointer;
-}
 
-.icon:first-child {
-    color: teal;
-}
+    &:first-child {
+        color: teal;
+    }
 
-.icon:last-child {
-    color: tomato;
+    &:last-child {
+        color: tomato;
+    }
 }
 
 .info {

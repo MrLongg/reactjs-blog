@@ -1,0 +1,73 @@
+.wrapper {
+    margin-top: 120px;
+}
+
+.image {
+    margin-left: 150px;
+    width: 70vw;
+    height: 250px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.form {
+    position: relative;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-left: 150px;
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: rgb(121, 118, 118);
+    cursor: pointer;
+}
+
+.upload {
+    display: none;
+}
+
+.title {
+    font-size: 3rem;
+    border: none;
+    padding: 20px;
+    width: 70vw;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.content {
+    font-size: 2rem;
+    border: none;
+    padding: 20px;
+    width: 70vw;
+    height: 100vh;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.submit {
+    position: absolute;
+    top: 20px;
+    right: 50px;
+    color: white;
+    background-color: teal;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
