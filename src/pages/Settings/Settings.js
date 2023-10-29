@@ -18,6 +18,7 @@ function Settings() {
                     <label>Profile Picture</label>
                     <div className={cx('profile-picture')}>
                         <img
+                            className={cx('image')}
                             src="https://images.pexels.com/photos/6685428/pexels-photo-6685428.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
                             alt=""
                         />
@@ -27,6 +28,12 @@ function Settings() {
                         <input className={cx('input-file')} type="file" id="fileInput" />
                     </div>
                     <label>Username</label>
+                    <input type="text" placeholder="Someone" />
+                    <label>Email</label>
+                    <input type="email" placeholder="someone@gmail.com" />
+                    <label>Password</label>
+                    <input type="password" />
+                    <button className={cx('submit')}>Update</button>
                 </form>
             </div>
             <Sidebar />
