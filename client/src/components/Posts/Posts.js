@@ -4,13 +4,12 @@ import PostItem from './PostItem';
 
 const cx = classNames.bind(styles);
 
-function Posts() {
+function Posts({posts}) {
     return (
         <div className={cx('wrapper')}>
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
+            {posts.map((post, index) => (
+                <PostItem key={index} post={post}/>
+            ))}
         </div>
     );
 }

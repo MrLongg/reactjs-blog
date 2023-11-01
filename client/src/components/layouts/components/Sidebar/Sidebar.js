@@ -3,10 +3,22 @@ import styles from './Sidebar.module.scss';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faInstagram, faPinterest, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function Sidebar() {
+    const [cats, setCat] = useState([]);
+
+    useEffect(() => {
+        const getCats = async () => {
+            const res = await axios.get('/categories');
+            setCat(res.data);
+        };
+        getCats();
+    }, []);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('sidebar-item')}>
@@ -26,12 +38,11 @@ function Sidebar() {
             <div className={cx('sidebar-item')}>
                 <span className={cx('title')}>CATEGORIES</span>
                 <ul className={cx('sidebar-list')}>
-                    <li className={cx('sidebar-list-item')}>Life</li>
-                    <li className={cx('sidebar-list-item')}>Music</li>
-                    <li className={cx('sidebar-list-item')}>Style</li>
-                    <li className={cx('sidebar-list-item')}>Sport</li>
-                    <li className={cx('sidebar-list-item')}>Cinema</li>
-                    <li className={cx('sidebar-list-item')}>Tech</li>
+                    {cats.map((cat, index) => (
+                        <Link key={index} to={`/?cat=${cat.name}`}>
+                            <li className={cx('sidebar-list-item')}>{cat.name}</li>
+                        </Link>
+                    ))}
                 </ul>
             </div>
             <div className={cx('sidebar-item')}>
