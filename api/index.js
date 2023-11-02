@@ -7,9 +7,11 @@ const userRoute = require("./routes/users")
 const postRoute = require("./routes/posts")
 const categoryRoute = require("./routes/categories")
 const multer = require("multer")
+const path = require("path")
 
 dotenv.config()
 app.use(express.json())
+app.use("/images", express.static(path.join(__dirname, "/images")))
 
 mongoose.connect("mongodb+srv://longtran:longtran123@cluster0.nexritu.mongodb.net/blog?retryWrites=true&w=majority")
     .then(console.log("Connected to MONGO!"))
@@ -19,7 +21,7 @@ mongoose.connect("mongodb+srv://longtran:longtran123@cluster0.nexritu.mongodb.ne
         destination: (req, file, callback) => {
             callback(null, "images")
         }, filename: (req, file, callback) => {
-            callback(null, "hello.jpg")
+            callback(null, req.body.name)
         }
     })
 

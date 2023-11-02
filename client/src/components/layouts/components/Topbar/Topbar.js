@@ -4,11 +4,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faInstagram, faPinterest, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { Context } from '~/context/Context';
 
 const cx = classNames.bind(styles);
 
 function Topbar() {
-    const user = false;
+
+    const { user, dispatch } = useContext(Context);
+
+    const handleLogout = () => {
+        dispatch({type: "LOGOUT"})
+    }
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('left')}>
@@ -31,14 +39,14 @@ function Topbar() {
                     <li className={cx('list-item')}>
                         <Link to="/write">WRITE</Link>
                     </li>
-                    <li className={cx('list-item')}>{user && 'LOGOUT'}</li>
+                    <li className={cx('list-item')} onClick={handleLogout}>{user && 'LOGOUT'}</li>
                 </ul>
             </div>
             <div className={cx('right')}>
                 {user ? (
                     <img
                         className={cx('avatar')}
-                        src="https://yt3.ggpht.com/wWDqp5j3QmrwIDRCBn0t1cKPkGNKpe5q9E1U5vCVPxcIppPnOAwwjZ8z4DgrIIhWTDHSxKPdwA=s88-c-k-c0x00ffffff-no-rj"
+                        src={user.profilePic}
                         alt="Hình ảnh đại diện"
                     />
                 ) : (

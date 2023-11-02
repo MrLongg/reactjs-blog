@@ -3,6 +3,8 @@
 }
 
 .post-wrapper {
+    display: flex;
+    flex-direction: column;
     padding: 20px 20px 20px 40px;
 }
 
@@ -18,6 +20,20 @@
     font-size: 2.8rem;
     text-align: center;
     margin: 10px;
+}
+
+.title-input {
+    font-family: 'Lora', serif;
+    font-size: 2.8rem;
+    text-align: center;
+    margin: 10px;
+    border: none;
+    color: gray;
+    border-bottom: 1px solid lightgrey;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 .edit {
@@ -56,4 +72,27 @@
     margin-left: 20px;
     font-size: 3rem;
     font-weight: 600;
+}
+
+.description-input {
+    color: #666;
+    font-size: 1.8rem;
+    line-height: 25px;
+    border: none;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.confirm-update {
+    width: 100px;
+    color: white;
+    background-color: teal;
+    border: none;
+    padding: 5px;
+    margin-top: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-end;
 }

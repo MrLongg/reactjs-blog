@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
 function Login() {
     const userRef = useRef();
     const passwordRef = useRef();
-    const { user, dispatch, isFetching } = useContext(Context);
+    const { dispatch, isFetching } = useContext(Context);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,8 +28,6 @@ function Login() {
         console.log(passwordRef.current.value);
     };
 
-    console.log(user);
-
     return (
         <div className={cx('wrapper')}>
             <span className={cx('title')}>Login</span>
@@ -43,7 +41,7 @@ function Login() {
                     placeholder="Enter your password..."
                     ref={passwordRef}
                 />
-                <button className={cx('login')} type="submit">
+                <button className={cx('login')} type="submit" disabled={isFetching}>
                     Login
                 </button>
             </form>

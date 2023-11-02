@@ -18,9 +18,15 @@ const Reducer = (state, action) => {
                 isFetching: false,
                 error: true,
             };
-            default:
-                return state
+        case 'LOGOUT':
+            return {
+                user: null,
+                isFetching: false,
+                error: false,
+            };
+        default:
+            return state;
     }
 };
 
-export default Reducer
+export default Reducer;

@@ -2,29 +2,74 @@ import classNames from 'classnames/bind';
 import styles from './Write.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { useContext, useState } from 'react';
+import axios from 'axios';
+import { Context } from '~/context/Context';
 
 const cx = classNames.bind(styles);
 
 function Write() {
+    const [title, setTitle] = useState('');
+    const [desc, setDesc] = useState('');
+    const [file, setFile] = useState(null);
+    const { user } = useContext(Context);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const newPost = {
+            username: user.username,
+            title,
+            desc,
+        };
+        if (file) {
+            const data = new FormData();
+            const filename = Date.now() + file.name;
+            data.append('name', filename);
+            data.append('file', file);
+            newPost.photo = filename;
+            try {
+                await axios.post('/upload', data);
+            } catch (err) {}
+        }
+        try {
+            const res = await axios.post('/posts', newPost);
+            window.location.replace('/post/' + res.data._id);
+        } catch (err) {}
+    };
+
     return (
         <div className={cx('wrapper')}>
-            <img
-                className={cx('image')}
-                src="https://images.pexels.com/photos/6685428/pexels-photo-6685428.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                alt=""
-            />
-            <form className={cx('form')}>
+            {file && <img className={cx('image')} src={URL.createObjectURL(file)} alt="" />}
+            <form className={cx('form')} onSubmit={handleSubmit}>
                 <div className={cx('form-group')}>
                     <label htmlFor="fileInput">
                         <FontAwesomeIcon className={cx('icon')} icon={faPlus} />
                     </label>
-                    <input className={cx('upload')} type="file" id="fileInput" />
-                    <input className={cx('title')} type="text" placeholder="Title" autoFocus />
+                    <input
+                        className={cx('upload')}
+                        type="file"
+                        id="fileInput"
+                        onChange={(e) => setFile(e.target.files[0])}
+                    />
+                    <input
+                        className={cx('title')}
+                        type="text"
+                        placeholder="Title"
+                        autoFocus
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
                 </div>
                 <div className={cx('form-group')}>
-                    <textarea className={cx('content')} placeholder="Tell your story..." type="text"></textarea>
+                    <textarea
+                        className={cx('content')}
+                        placeholder="Tell your story..."
+                        type="text"
+                        onChange={(e) => setDesc(e.target.value)}
+                    ></textarea>
                 </div>
-                <button className={cx('submit')}>Publish</button>
+                <button className={cx('submit')} type="submit">
+                    Publish
+                </button>
             </form>
         </div>
     );

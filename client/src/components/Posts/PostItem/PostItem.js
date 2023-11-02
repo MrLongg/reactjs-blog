@@ -5,12 +5,13 @@ import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function PostItem({post}) {
+    const PF = 'http://127.0.0.1:5000/images/'
     return (
         <div className={cx('wrapper')}>
             {post.photo && (
                 <img
                     className={cx('image')}
-                    src={post.photo}
+                    src={PF + post.photo}
                     alt=""
                 />
             )}
