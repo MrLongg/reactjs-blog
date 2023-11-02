@@ -10,12 +10,13 @@ import { Context } from '~/context/Context';
 const cx = classNames.bind(styles);
 
 function Topbar() {
-
     const { user, dispatch } = useContext(Context);
 
+    const PF = 'http://127.0.0.1:5000/images/';
+
     const handleLogout = () => {
-        dispatch({type: "LOGOUT"})
-    }
+        dispatch({ type: 'LOGOUT' });
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -39,16 +40,16 @@ function Topbar() {
                     <li className={cx('list-item')}>
                         <Link to="/write">WRITE</Link>
                     </li>
-                    <li className={cx('list-item')} onClick={handleLogout}>{user && 'LOGOUT'}</li>
+                    <li className={cx('list-item')} onClick={handleLogout}>
+                        {user && 'LOGOUT'}
+                    </li>
                 </ul>
             </div>
             <div className={cx('right')}>
                 {user ? (
-                    <img
-                        className={cx('avatar')}
-                        src={user.profilePic}
-                        alt="Hình ảnh đại diện"
-                    />
+                    <Link to="/settings">
+                        <img className={cx('avatar')} src={PF + user.profilePic} alt="Hình ảnh đại diện" />
+                    </Link>
                 ) : (
                     <ul className={cx('center-list')}>
                         <li className={cx('list-item')}>

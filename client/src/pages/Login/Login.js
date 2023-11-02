@@ -24,8 +24,6 @@ function Login() {
         } catch (err) {
             dispatch({ type: 'LOGIN_FAILURE' });
         }
-        console.log(userRef.current.value);
-        console.log(passwordRef.current.value);
     };
 
     return (

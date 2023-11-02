@@ -3,10 +3,50 @@ import styles from './Settings.module.scss';
 import Sidebar from '~/components/layouts/components/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { useContext, useState } from 'react';
+import { Context } from '~/context/Context';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
 function Settings() {
+    const { user, dispatch } = useContext(Context);
+    const [file, setFile] = useState(null);
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [success, setSuccess] = useState(false);
+
+    const PF = 'http://127.0.0.1:5000/images/';
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        dispatch({ type: 'UPDATE_START' });
+        const updateUser = {
+            userId: user._id,
+            username,
+            email,
+            password,
+        };
+        if (file) {
+            const data = new FormData();
+            const filename = Date.now() + file.name;
+            data.append('name', filename);
+            data.append('file', file);
+            updateUser.profilePic = filename;
+            try {
+                await axios.post('/upload', data);
+            } catch (err) {}
+        }
+        try {
+            const res = await axios.put('/users/' + user._id, updateUser);
+            setSuccess(true);
+            dispatch({ type: 'UPDATE_SUCCESS', payload: res.data });
+        } catch (err) {
+            dispatch({ type: 'UPDATE_FAILURE' });
+        }
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -14,26 +54,30 @@ function Settings() {
                     <span className={cx('update-title')}>Update Your Account</span>
                     <span className={cx('delete-title')}>Delete Account</span>
                 </div>
-                <form className={cx('form')}>
+                <form className={cx('form')} onSubmit={handleSubmit}>
                     <label>Profile Picture</label>
                     <div className={cx('profile-picture')}>
-                        <img
-                            className={cx('image')}
-                            src="https://images.pexels.com/photos/6685428/pexels-photo-6685428.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                            alt=""
-                        />
+                        <img className={cx('image')} src={file ? URL.createObjectURL(file) : PF + user.profilePic} alt="" />
                         <label htmlFor="fileInput">
                             <FontAwesomeIcon className={cx('icon')} icon={faUserCircle} />
                         </label>
-                        <input className={cx('input-file')} type="file" id="fileInput" />
+                        <input
+                            className={cx('input-file')}
+                            type="file"
+                            id="fileInput"
+                            onChange={(e) => setFile(e.target.files[0])}
+                        />
                     </div>
                     <label>Username</label>
-                    <input type="text" placeholder="Someone" />
+                    <input type="text" placeholder={user.username} onChange={(e) => setUsername(e.target.value)} />
                     <label>Email</label>
-                    <input type="email" placeholder="someone@gmail.com" />
+                    <input type="email" placeholder={user.email} onChange={(e) => setEmail(e.target.value)} />
                     <label>Password</label>
-                    <input type="password" />
-                    <button className={cx('submit')}>Update</button>
+                    <input type="password" onChange={(e) => setPassword(e.target.value)} />
+                    <button className={cx('submit')} type="submit">
+                        Update
+                    </button>
+                    {success && <span className={cx('success-alert')}>Profile has been updated!</span>}
                 </form>
             </div>
             <Sidebar />
