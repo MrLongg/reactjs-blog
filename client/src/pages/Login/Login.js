@@ -8,7 +8,7 @@ import axios from 'axios';
 const cx = classNames.bind(styles);
 
 function Login() {
-    const userRef = useRef();
+    const emailRef = useRef();
     const passwordRef = useRef();
     const { dispatch, isFetching } = useContext(Context);
 
@@ -17,7 +17,7 @@ function Login() {
         dispatch({ type: 'LOGIN_START' });
         try {
             const res = await axios.post('/auth/login', {
-                username: userRef.current.value,
+                email: emailRef.current.value,
                 password: passwordRef.current.value,
             });
             dispatch({ type: 'LOGIN_SUCCESS', payload: res.data });
@@ -30,8 +30,8 @@ function Login() {
         <div className={cx('wrapper')}>
             <span className={cx('title')}>Login</span>
             <form className={cx('form')} onSubmit={handleSubmit}>
-                <label>Username</label>
-                <input className={cx('login-input')} type="text" placeholder="Enter your username..." ref={userRef} />
+                <label>Email</label>
+                <input className={cx('login-input')} type="text" placeholder="Enter your email..." ref={emailRef} />
                 <label>Password</label>
                 <input
                     className={cx('login-input')}

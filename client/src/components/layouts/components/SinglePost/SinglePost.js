@@ -18,7 +18,7 @@ function SinglePost() {
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
     const [updateMode, setUpdateMode] = useState(false);
-    
+
     const handleDelete = async () => {
         try {
             await axios.delete(`/posts/${post._id}`, { data: { username: user.username } });
@@ -29,7 +29,7 @@ function SinglePost() {
     const handleUpdate = async () => {
         try {
             await axios.put(`/posts/${post._id}`, { username: user.username, title, desc });
-            setUpdateMode(false)
+            setUpdateMode(false);
         } catch (err) {}
     };
 
@@ -47,13 +47,16 @@ function SinglePost() {
             <div className={cx('post-wrapper')}>
                 {post.photo && <img className={cx('image')} src={PF + post.photo} alt="" />}
                 {updateMode ? (
-                    <input
-                        className={cx('title-input')}
-                        type="text"
-                        value={title}
-                        autoFocus
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
+                    <>
+                        <div></div>
+                        <input
+                            className={cx('title-input')}
+                            type="text"
+                            value={title}
+                            autoFocus
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
+                    </>
                 ) : (
                     <h1 className={cx('title')}>
                         {title}
