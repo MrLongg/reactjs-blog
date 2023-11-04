@@ -9,11 +9,13 @@ function PostItem({post}) {
     return (
         <div className={cx('wrapper')}>
             {post.photo && (
+                <Link to={`/post/${post._id}`}>
                 <img
                     className={cx('image')}
                     src={PF + post.photo}
                     alt=""
                 />
+                </Link>
             )}
             <div className={cx('info')}>
                 <div className={cx('cats')}>

@@ -18,7 +18,7 @@ function SinglePost() {
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
     const [updateMode, setUpdateMode] = useState(false);
-
+    
     const handleDelete = async () => {
         try {
             await axios.delete(`/posts/${post._id}`, { data: { username: user.username } });

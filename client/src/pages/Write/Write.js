@@ -29,12 +29,16 @@ function Write() {
             newPost.photo = filename;
             try {
                 await axios.post('/upload', data);
-            } catch (err) {}
+            } catch (err) {
+                console.log(err)
+            }
         }
         try {
             const res = await axios.post('/posts', newPost);
             window.location.replace('/post/' + res.data._id);
-        } catch (err) {}
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (

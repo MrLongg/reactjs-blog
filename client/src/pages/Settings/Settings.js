@@ -12,8 +12,8 @@ const cx = classNames.bind(styles);
 function Settings() {
     const { user, dispatch } = useContext(Context);
     const [file, setFile] = useState(null);
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
+    const [editedUsername, setEditedUsername] = useState(user.username)
+    const [editedEmail, setEditedEmail] = useState(user.email);
     const [password, setPassword] = useState('');
     const [success, setSuccess] = useState(false);
 
@@ -24,8 +24,8 @@ function Settings() {
         dispatch({ type: 'UPDATE_START' });
         const updateUser = {
             userId: user._id,
-            username,
-            email,
+            username: editedUsername,
+            email: editedEmail,
             password,
         };
         if (file) {
@@ -69,9 +69,9 @@ function Settings() {
                         />
                     </div>
                     <label>Username</label>
-                    <input type="text" placeholder={user.username} onChange={(e) => setUsername(e.target.value)} />
+                    <input type="text" value={editedUsername} onChange={(e) => setEditedUsername(e.target.value)} />
                     <label>Email</label>
-                    <input type="email" placeholder={user.email} onChange={(e) => setEmail(e.target.value)} />
+                    <input type="email" value={editedEmail} onChange={(e) => setEditedEmail(e.target.value)} />
                     <label>Password</label>
                     <input type="password" onChange={(e) => setPassword(e.target.value)} />
                     <button className={cx('submit')} type="submit">
