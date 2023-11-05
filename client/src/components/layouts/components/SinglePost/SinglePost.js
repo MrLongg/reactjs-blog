@@ -16,6 +16,7 @@ function SinglePost() {
     const PF = 'http://127.0.0.1:5000/images/';
     const { user } = useContext(Context);
     const [title, setTitle] = useState('');
+    const [file, setFile] = useState(null);
     const [desc, setDesc] = useState('');
     const [updateMode, setUpdateMode] = useState(false);
 
@@ -23,17 +24,36 @@ function SinglePost() {
         try {
             await axios.delete(`/posts/${post._id}`, { data: { username: user.username } });
             window.location.replace('/');
-        } catch (err) {}
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     const handleUpdate = async () => {
+        const data = new FormData();
+        const filename = Date.now() + file.name;
+        data.append('name', filename);
+        data.append('file', file);
         try {
-            await axios.put(`/posts/${post._id}`, { username: user.username, title, desc });
+            await axios.post('/upload', data);
+            window.location.replace(`/post/${post._id}`);
+        } catch (err) {
+            console.log(err);
+        }
+        try {
+            await axios.put(`/posts/${post._id}`, { username: user.username, title, desc, photo: filename });
             setUpdateMode(false);
-        } catch (err) {}
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const handleBack = () => {
+        setUpdateMode(false);
     };
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         const getPost = async () => {
             const res = await axios.get('/posts/' + path);
             setPost(res.data);
@@ -48,7 +68,14 @@ function SinglePost() {
                 {post.photo && <img className={cx('image')} src={PF + post.photo} alt="" />}
                 {updateMode ? (
                     <>
-                        <div></div>
+                        <div>
+                            <input
+                                className={cx('input-file')}
+                                type="file"
+                                id="fileInput"
+                                onChange={(e) => setFile(e.target.files[0])}
+                            />
+                        </div>
                         <input
                             className={cx('title-input')}
                             type="text"
@@ -91,9 +118,14 @@ function SinglePost() {
                     <p className={cx('description')}>{desc}</p>
                 )}
                 {updateMode && (
-                    <button className={cx('confirm-update')} onClick={handleUpdate}>
-                        Update
-                    </button>
+                    <div className={cx('buttons')}>
+                        <button className={cx('confirm-update')} onClick={handleUpdate}>
+                            Update
+                        </button>
+                        <button className={cx('confirm-update')} onClick={handleBack}>
+                            Back
+                        </button>
+                    </div>
                 )}
             </div>
         </div>

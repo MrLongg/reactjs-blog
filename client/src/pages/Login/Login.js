@@ -23,6 +23,7 @@ function Login() {
             dispatch({ type: 'LOGIN_SUCCESS', payload: res.data });
         } catch (err) {
             dispatch({ type: 'LOGIN_FAILURE' });
+            console.log("Login failed!");
         }
     };
 

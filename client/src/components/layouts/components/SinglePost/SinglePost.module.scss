@@ -94,4 +94,13 @@
     border-radius: 5px;
     cursor: pointer;
     align-self: flex-end;
+
+    &:first-child {
+        margin-right: 10px;
+    }
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
 }
