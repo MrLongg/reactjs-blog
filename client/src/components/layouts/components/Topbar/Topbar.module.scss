@@ -48,6 +48,14 @@
     margin-right: 20px;
     font-weight: 300;
     cursor: pointer;
+
+    &:hover {
+        color: #afa4a4;
+    }
+
+    &:last-child {
+        margin-right: 0;
+    }
 }
 
 .search-icon {
