@@ -1,0 +1,17 @@
+.wrapper {
+    position: relative;
+}
+
+.content {
+    position: absolute;
+    display: inline-block;
+  text-decoration: none;
+  background-color: green;
+  border: none;
+  outline: none;
+  color: #fff;
+  padding: 12px 48px;
+  border-radius: 50px;
+  cursor: pointer;
+  min-width: 120px;
+}
