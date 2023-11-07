@@ -2,16 +2,40 @@
     position: relative;
 }
 
+.icon {
+    margin-left: 8px;
+    padding: 4px;
+    cursor: pointer;
+}
+
 .content {
-    position: absolute;
-    display: inline-block;
-  text-decoration: none;
-  background-color: green;
-  border: none;
-  outline: none;
-  color: #fff;
-  padding: 12px 48px;
-  border-radius: 50px;
-  cursor: pointer;
-  min-width: 120px;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    top: 60px;
+    right: 0;
+    background-color: #71be34;
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 50px;
+    min-width: 120px;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.08);
+    animation: slideInLeft linear 0.4s, fadeOut linear 0.4s 4s forwards;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
 }
