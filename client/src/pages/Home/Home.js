@@ -10,16 +10,17 @@ import { useLocation } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function Home() {
-    const [posts, setPosts] = useState([])
-    const {search} = useLocation()
+    const [posts, setPosts] = useState([]);
+    const { search } = useLocation();
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         const fetchPosts = async () => {
-            const res = await axios.get("/posts" + search)
-            setPosts(res.data)
-        }
-        fetchPosts()
-    }, [search])
+            const res = await axios.get('/posts' + search);
+            setPosts(res.data);
+        };
+        fetchPosts();
+    }, [search]);
 
     return (
         <>

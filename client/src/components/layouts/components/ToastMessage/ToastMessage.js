@@ -6,14 +6,14 @@ import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-function ToastMessage() {
+function ToastMessage({ message }) {
     const [showMessage, setShowMessage] = useState(true);
 
     return (
         <div className={cx('wrapper')}>
-            {showMessage && (
-                <span className={cx('content')}>
-                    Chỉnh sửa thành công
+            {message.type && showMessage && (
+                <span className={cx('content' , `content--${message.type}`)}>
+                    {message.title}
                     <FontAwesomeIcon className={cx('icon')} icon={faXmark} onClick={() => setShowMessage(false)} />
                 </span>
             )}

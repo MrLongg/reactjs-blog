@@ -6,19 +6,21 @@ import { Link, useLocation } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Context } from '~/context/Context';
+import ToastMessage from '../ToastMessage';
 
 const cx = classNames.bind(styles);
 
 function SinglePost() {
     const location = useLocation();
     const path = location.pathname.split('/')[2];
-    const [post, setPost] = useState({});
     const PF = 'http://127.0.0.1:5000/images/';
     const { user } = useContext(Context);
+    const [post, setPost] = useState({});
     const [title, setTitle] = useState('');
     const [file, setFile] = useState(null);
     const [desc, setDesc] = useState('');
     const [updateMode, setUpdateMode] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const handleDelete = async () => {
         try {
@@ -30,30 +32,54 @@ function SinglePost() {
     };
 
     const handleUpdate = async () => {
-        const data = new FormData();
-        const filename = Date.now() + file.name;
-        data.append('name', filename);
-        data.append('file', file);
+        setIsSuccess(false);
         try {
-            await axios.post('/upload', data);
-            window.location.replace(`/post/${post._id}`);
-        } catch (err) {
-            console.log(err);
-        }
-        try {
-            await axios.put(`/posts/${post._id}`, { username: user.username, title, desc, photo: filename });
-            setUpdateMode(false);
-        } catch (err) {
-            console.log(err);
-        }
-    };
+            if (file) {
+                const data = new FormData();
+                const filename = Date.now() + file.name;
+                data.append('name', filename);
+                data.append('file', file);
+                const payload = {
+                    username: user.username,
+                    title,
+                    desc,
+                    photo: filename,
+                };
+                await axios.post('/upload', data);
 
-    const handleBack = () => {
-        setUpdateMode(false);
+                await axios.put(`/posts/${post._id}`, payload);
+                setUpdateMode(false);
+                setIsSuccess(true);
+
+                // Update the component state with the new post data
+                setPost((prevPost) => ({
+                    ...prevPost,
+                    title,
+                    desc,
+                    photo: filename,
+                }));
+            } else {
+                await axios.put(`/posts/${post._id}`, { username: user.username, title, desc });
+                setUpdateMode(false);
+                setIsSuccess(true);
+
+                // Update the component state with the new post data
+                setPost((prevPost) => ({
+                    ...prevPost,
+                    title,
+                    desc,
+                }));
+            }
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     useEffect(() => {
         window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
         const getPost = async () => {
             const res = await axios.get('/posts/' + path);
             setPost(res.data);
@@ -62,6 +88,11 @@ function SinglePost() {
         };
         getPost();
     }, [path]);
+
+    const handleBack = () => {
+        setUpdateMode(false);
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('post-wrapper')}>
@@ -128,6 +159,13 @@ function SinglePost() {
                     </div>
                 )}
             </div>
+            {isSuccess && (
+                <ToastMessage
+                    message={{
+                        title: 'Thay đổi thành công',
+                    }}
+                />
+            )}
         </div>
     );
 }

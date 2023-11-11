@@ -14,13 +14,20 @@
     align-items: center;
     top: 60px;
     right: 0;
-    background-color: #71be34;
     color: #fff;
     padding: 10px 25px;
     border-radius: 50px;
     min-width: 120px;
     box-shadow: 0 5px 8px rgba(0, 0, 0, 0.08);
     animation: slideInLeft linear 0.4s, fadeOut linear 0.4s 4s forwards;
+}
+
+.content--success {
+    background-color: #71be34;
+}
+
+.content--error {
+    background-color: #ff623d;
 }
 
 @keyframes slideInLeft {
