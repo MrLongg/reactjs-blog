@@ -27,7 +27,7 @@ function Settings() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSuccess(false);
-        setIsSubmitted(true)
+        setIsSubmitted(false);
         dispatch({ type: 'UPDATE_START' });
         if (newPassword === conPassword) {
             const updateUser = {
@@ -52,6 +52,7 @@ function Settings() {
                 const res = await axios.put('/users/' + user._id, updateUser);
                 if (res.status === 200) {
                     setIsSuccess(true);
+                    setIsSubmitted(true);
                     dispatch({ type: 'UPDATE_SUCCESS', payload: res.data });
                     setPassword('');
                     setConPassword('');
@@ -66,6 +67,7 @@ function Settings() {
                     setError(err.response.data);
                 }
                 dispatch({ type: 'UPDATE_FAILURE' });
+                setIsSubmitted(true);
                 setIsSuccess(false);
             }
         } else {
@@ -142,7 +144,7 @@ function Settings() {
                     <ToastMessage
                         message={{
                             title: 'Thay đổi thành công',
-                            type: 'success'
+                            type: 'success',
                         }}
                     />
                 )}
@@ -150,7 +152,7 @@ function Settings() {
                     <ToastMessage
                         message={{
                             title: 'Thay đổi không thành công',
-                            type: 'error'
+                            type: 'error',
                         }}
                     />
                 )}

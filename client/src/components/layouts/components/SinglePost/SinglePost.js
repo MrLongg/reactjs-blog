@@ -21,6 +21,7 @@ function SinglePost() {
     const [desc, setDesc] = useState('');
     const [updateMode, setUpdateMode] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleDelete = async () => {
         try {
@@ -33,6 +34,7 @@ function SinglePost() {
 
     const handleUpdate = async () => {
         setIsSuccess(false);
+        setIsSubmitted(false);
         try {
             if (file) {
                 const data = new FormData();
@@ -50,6 +52,7 @@ function SinglePost() {
                 await axios.put(`/posts/${post._id}`, payload);
                 setUpdateMode(false);
                 setIsSuccess(true);
+                setIsSubmitted(true);
 
                 // Update the component state with the new post data
                 setPost((prevPost) => ({
@@ -62,6 +65,7 @@ function SinglePost() {
                 await axios.put(`/posts/${post._id}`, { username: user.username, title, desc });
                 setUpdateMode(false);
                 setIsSuccess(true);
+                setIsSubmitted(true);
 
                 // Update the component state with the new post data
                 setPost((prevPost) => ({
@@ -159,10 +163,19 @@ function SinglePost() {
                     </div>
                 )}
             </div>
-            {isSuccess && (
+            {isSuccess && isSubmitted && (
                 <ToastMessage
                     message={{
                         title: 'Thay đổi thành công',
+                        type: 'success',
+                    }}
+                />
+            )}
+            {!isSuccess && isSubmitted && (
+                <ToastMessage
+                    message={{
+                        title: 'Thay đổi không thành công',
+                        type: 'error',
                     }}
                 />
             )}
