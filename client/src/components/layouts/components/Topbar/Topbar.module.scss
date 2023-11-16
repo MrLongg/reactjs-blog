@@ -58,8 +58,31 @@
     }
 }
 
-.search-icon {
+.button-wrapper {
     margin-left: 15px;
+}
+
+.search-input {
+    border: none;
+    border-bottom: 1px solid lightgray;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.icon {
     color: #666;
     cursor: pointer;
+}
+
+.icon-inner {
+    margin-left: 10px;
+    color: #666;
+    cursor: pointer;
+}
+
+.button {
+    border: none;
+    background-color: transparent;
 }
