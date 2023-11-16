@@ -6,7 +6,7 @@ import Sidebar from '~/components/layouts/components/Sidebar';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-import ReactPaginate from 'react-paginate';
+import Pagination from '~/components/layouts/components/Pagination';
 
 const cx = classNames.bind(styles);
 
@@ -41,27 +41,7 @@ function Home() {
                 <Posts posts={currentPosts} />
                 <Sidebar />
             </div>
-            
-                <ReactPaginate
-                    nextLabel="next >"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={3}
-                    marginPagesDisplayed={2}
-                    pageCount={pageCount}
-                    previousLabel="< previous"
-                    pageClassName="page-item"
-                    pageLinkClassName="page-link"
-                    previousClassName="page-item"
-                    previousLinkClassName="page-link"
-                    nextClassName="page-item"
-                    nextLinkClassName="page-link"
-                    breakLabel="..."
-                    breakClassName="page-item"
-                    breakLinkClassName="page-link"
-                    containerClassName="pagination"
-                    activeClassName="active"
-                    renderOnZeroPageCount={null}
-                />
+                <Pagination pageCount={pageCount} handlePageClick={handlePageClick} />
         </>
     );
 }

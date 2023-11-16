@@ -3,7 +3,7 @@ import styles from './Topbar.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faInstagram, faPinterest, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import { Context } from '~/context/Context';
 
@@ -11,8 +11,14 @@ const cx = classNames.bind(styles);
 
 function Topbar() {
     const { user, dispatch } = useContext(Context);
-
+    const location = useLocation()
     const PF = 'http://127.0.0.1:5000/images/';
+
+    const goToPageOne = () => {
+        if (location.pathname !== 'http://127.0.0.1:3000/') {
+            window.location.href = 'http://127.0.0.1:3000/'
+        }
+    }
 
     const handleLogout = () => {
         dispatch({ type: 'LOGOUT' });
@@ -28,7 +34,7 @@ function Topbar() {
             </div>
             <div className={cx('center')}>
                 <ul className={cx('center-list')}>
-                    <li className={cx('list-item')}>
+                    <li className={cx('list-item')} onClick={goToPageOne}>
                         <Link to="/">HOME</Link>
                     </li>
                     <li className={cx('list-item')}>
