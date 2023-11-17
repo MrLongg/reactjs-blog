@@ -8,37 +8,44 @@ import { useContext, useState, useEffect } from 'react';
 import { Context } from '~/context/Context';
 import axios from 'axios';
 import ToastMessage from '../ToastMessage';
+import HeadlessTippy from '@tippyjs/react/headless';
 
 const cx = classNames.bind(styles);
 
 function Topbar() {
     const { user, dispatch } = useContext(Context);
     const [isInputActive, setIsInputActive] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [isFound, setIsFound] = useState(false);
+    const [isSubmit, setIsSubmit] = useState(false);
+    const [showResult, setShowResult] = useState(true);
     const location = useLocation();
     const PF = 'http://127.0.0.1:5000/images/';
 
     const [posts, setPosts] = useState([]);
-    const { search } = useLocation();
 
-    // Fetch posts on component mount
+    const [searchItem, setSearchItem] = useState('');
+    const [filteredPosts, setFilteredPosts] = useState(posts);
+    const [apiPosts, setApiPosts] = useState([]);
+
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                // Fetch posts from your API or data source
                 const response = await axios.get('/posts');
-                setPosts(response.data); // Assuming response.data contains posts
-                console.log(response.data);
+                setApiPosts(response.data);
+                setFilteredPosts(response.data);
+                setPosts(response.data);
             } catch (error) {
                 console.error('Error fetching posts:', error);
             }
         };
-
         fetchPosts();
-    }, [search]);
+    }, []);
 
     const handleInputChange = (e) => {
-        setSearchTerm(e.target.value);
+        const searchTerm = e.target.value;
+        setSearchItem(searchTerm);
+        const filteredItems = apiPosts.filter((post) => post.title.toLowerCase().includes(searchTerm.toLowerCase()));
+        setFilteredPosts(filteredItems);
     };
 
     const activateInput = () => {
@@ -50,17 +57,25 @@ function Topbar() {
     };
 
     const handleSearch = () => {
+        setIsFound(false);
         const matchingPosts = posts.filter(
-            (post) => post.title && post.title.toLowerCase().includes(searchTerm.toLowerCase()),
+            (post) => post.title && post.title.toLowerCase().includes(searchItem.toLowerCase()),
         );
 
         if (matchingPosts.length > 0) {
-            const postId = matchingPosts[0]._id; // Considering only the first match for simplicity
+            setIsFound(true);
+            const postId = matchingPosts[0]._id;
             window.location.href = `http://127.0.0.1:3000/post/${postId}`;
         } else {
-            <ToastMessage />
-            console.log('No results found');
+            setIsSubmit(true);
+            setTimeout(() => {
+                setIsSubmit(false);
+            }, 3000);
         }
+    };
+
+    const handleHideResult = () => {
+        setShowResult(false);
     };
 
     const goToPageOne = () => {
@@ -117,21 +132,48 @@ function Topbar() {
                 )}
                 <div className={cx('button-wrapper')}>
                     {isInputActive ? (
-                        <div>
-                            <input
-                                className={cx('search-input')}
-                                type="text"
-                                value={searchTerm}
-                                onChange={handleInputChange}
-                                placeholder="Search posts..."
-                            />
-                            <button className={cx('button')} onClick={handleSearch}>
-                                <FontAwesomeIcon className={cx('icon-inner')} icon={faSearch} />
-                            </button>
-                            <button onClick={deactivateInput} className={cx('button')}>
-                                <FontAwesomeIcon className={cx('icon-inner')} icon={faXmark} />
-                            </button>
-                        </div>
+                        <HeadlessTippy
+                            interactive
+                            appendTo={() => document.body}
+                            visible={showResult && searchItem.length > 0}
+                            render={(attrs) => (
+                                <div className={cx('search-result')} tabIndex="-1" {...attrs}>
+                                    <h4 className={cx('search-title')}>Posts</h4>
+                                    {filteredPosts.length === 0 ? (
+                                        <p className={cx('search-item')}>No result found</p>
+                                    ) : (
+                                        filteredPosts.map((post) => (
+                                            <p
+                                                key={post._id}
+                                                className={cx('search-item')}
+                                                onClick={() => (window.location.href = `/post/${post._id}`)}
+                                            >
+                                                {post.title}
+                                            </p>
+                                        ))
+                                    )}
+                                </div>
+                            )}
+                            onClickOutside={handleHideResult}
+                        >
+                            <div className={cx('search')}>
+                                <input
+                                    autoFocus
+                                    className={cx('search-input')}
+                                    type="text"
+                                    value={searchItem}
+                                    onChange={handleInputChange}
+                                    onFocus={() => setShowResult(true)}
+                                    placeholder="Search posts..."
+                                />
+                                <button className={cx('button')} onClick={handleSearch}>
+                                    <FontAwesomeIcon className={cx('icon-inner')} icon={faSearch} />
+                                </button>
+                                <button onClick={deactivateInput} className={cx('button')}>
+                                    <FontAwesomeIcon className={cx('icon-inner')} icon={faXmark} />
+                                </button>
+                            </div>
+                        </HeadlessTippy>
                     ) : (
                         <button onClick={activateInput} className={cx('button')}>
                             <FontAwesomeIcon className={cx('icon')} icon={faSearch} />
@@ -139,6 +181,14 @@ function Topbar() {
                     )}
                 </div>
             </div>
+            {!isFound && isSubmit && (
+                <ToastMessage
+                    message={{
+                        title: 'Không tìm thấy bài viết',
+                        type: 'error',
+                    }}
+                />
+            )}
         </div>
     );
 }
