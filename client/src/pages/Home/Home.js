@@ -9,13 +9,13 @@ import { useLocation } from 'react-router-dom';
 import Pagination from '~/components/layouts/components/Pagination';
 
 const cx = classNames.bind(styles);
+const postsPerPage = 4;
 
 function Home() {
     const [posts, setPosts] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const { search } = useLocation();
     const [currentPage, setCurrentPage] = useState(0);
-    const postsPerPage = 4;
 
     const handlePageClick = (e) => {
         setCurrentPage(e.selected);
@@ -29,7 +29,7 @@ function Home() {
         };
         window.scrollTo(0, 0);
         fetchPosts();
-    }, [search, postsPerPage]);
+    }, [search]);
 
     const offset = currentPage * postsPerPage;
     const currentPosts = posts.slice(offset, offset + postsPerPage);

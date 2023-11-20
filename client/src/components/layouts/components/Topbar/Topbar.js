@@ -58,8 +58,9 @@ function Topbar() {
 
     const handleSearch = () => {
         setIsFound(false);
-        const matchingPosts = posts.filter(
-            (post) => post.title && post.title.toLowerCase().includes(searchItem.toLowerCase()),
+        setShowResult(false);
+        const matchingPosts = filteredPosts.filter((post) =>
+            post.title.toLowerCase().includes(searchItem.toLowerCase()),
         );
 
         if (matchingPosts.length > 0) {
@@ -71,6 +72,12 @@ function Topbar() {
             setTimeout(() => {
                 setIsSubmit(false);
             }, 3000);
+        }
+    };
+
+    const handleEnterKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch();
         }
     };
 
@@ -164,6 +171,7 @@ function Topbar() {
                                     value={searchItem}
                                     onChange={handleInputChange}
                                     onFocus={() => setShowResult(true)}
+                                    onKeyDown={handleEnterKeyPress}
                                     placeholder="Search posts..."
                                 />
                                 <button className={cx('button')} onClick={handleSearch}>
